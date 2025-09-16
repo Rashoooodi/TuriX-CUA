@@ -5,11 +5,11 @@
     "provider": "turix",
     "model_name": "turix-model",
     "api_key": "your_api_key_here",
-    "base_url": "https://llm.turixapi.io/v1"
+    "base_url": "https://llm.turixapi.io/v1" 
   },
 
   "agent": {
-    "task": "open Chrome, go to youtube, and search for AI tutorials",
+    "task": "open Chrome, go to github, and search for turix-cua in the github webpage. Enter the TuriX-CUA repository, and star it.",
     "short_memory_len": 5,
     "use_ui": false,
     "max_actions_per_step": 5,
