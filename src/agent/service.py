@@ -30,6 +30,8 @@ from pydantic import BaseModel, ValidationError
 from src.agent.message_manager.service import MessageManager
 from src.agent.prompts import (
     SystemPrompt_turix,
+    BrainPrompt_turix,
+    ActorPrompt_turix,
     SystemPrompt,
 )
 from src.agent.views import (
@@ -606,6 +608,26 @@ class Agent:
             task=self.task,
             action_descriptions=self.controller.registry.get_prompt_description(),
             system_prompt_class=self.system_prompt_class,  # Typically your SystemPrompt
+            max_input_tokens=self.max_input_tokens,
+            include_attributes=self.include_attributes,
+            max_error_length=self.max_error_length,
+            max_actions_per_step=self.max_actions_per_step,
+        )
+        self.brain_message_manager = MessageManager(
+            llm=self.brain_llm,
+            task=self.task,
+            action_descriptions=self.controller.registry.get_prompt_description(),
+            system_prompt_class=BrainPrompt_turix, # Typically your SystemPrompt
+            max_input_tokens=self.max_input_tokens,
+            include_attributes=self.include_attributes,
+            max_error_length=self.max_error_length,
+            max_actions_per_step=self.max_actions_per_step,
+        )
+        self.actor_message_manager = MessageManager(
+            llm=self.actor_llm,
+            task=self.task,
+            action_descriptions=self.controller.registry.get_prompt_description(),
+            system_prompt_class=ActorPrompt_turix, # Adjust if needed for action-specific prompt
             max_input_tokens=self.max_input_tokens,
             include_attributes=self.include_attributes,
             max_error_length=self.max_error_length,
