@@ -49,7 +49,7 @@ Prefer your own model? **Change in `config.json` and go.**
 
 Ready to level up? Update your `config.json` and start automating—happy hacking! 🎉
 
-*Stay tuned to our [Discord](https://discord.gg/BRxXtnGg) for tips, user stories, and the next big drop.*
+*Stay tuned to our [Discord](https://discord.gg/vkEYj4EV2n) for tips, user stories, and the next big drop.*
 
 ---
 
