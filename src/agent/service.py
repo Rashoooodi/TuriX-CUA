@@ -40,7 +40,7 @@ from src.agent.views import (
     AgentStepInfo,
     AgentBrain
 )
-from src.controller.registry.views import ActionModel
+from src.agent.planner_service import Planner
 from src.controller.service import Controller
 from src.mac.tree import MacUITreeBuilder
 from src.utils import time_execution_async
@@ -92,6 +92,7 @@ class Agent:
         short_memory_len : int,
         controller: Controller = Controller(),
         use_ui = False,
+        planner_llm: Optional[BaseChatModel] = None,
         save_brain_conversation_path: Optional[str] = None,
         save_brain_conversation_path_encoding: Optional[str] = 'utf-8',
         save_actor_conversation_path: Optional[str] = None,
@@ -126,6 +127,7 @@ class Agent:
         self.resume = resume
         self.brain_llm = to_structured(brain_llm, OutputSchemas.BRAIN_RESPONSE_FORMAT, BrainOutput)
         self.actor_llm = to_structured(actor_llm, OutputSchemas.ACTION_RESPONSE_FORMAT, ActorOutput)
+        self.planner_llm = planner_llm
 
         self.save_actor_conversation_path = save_actor_conversation_path
         self.save_actor_conversation_path_encoding = save_actor_conversation_path_encoding
@@ -153,6 +155,12 @@ class Agent:
         # Setup dynamic Action Model
         self._setup_action_models()
         self._set_model_names()
+        if self.planner_llm:
+            self.planner = Planner(
+                planner_llm=self.planner_llm,
+                task=self.task,
+                max_input_tokens=self.max_input_tokens,
+            )
 
         self.tool_calling_method = self.set_tool_calling_method(tool_calling_method)
         self.initiate_messages()
@@ -610,6 +618,10 @@ class Agent:
     async def run(self, max_steps: int = 100) -> AgentHistoryList:
         try:
             self._log_agent_run()
+
+            if self.planner_llm and not self.resume:
+                await self.edit()
+
             for step in range(max_steps):
                 if self.resume:
                     self.load_memory()
@@ -636,6 +648,25 @@ class Agent:
             logger.exception('Error running agent')
             raise
 
+    async def edit(self):
+        response = await self.planner.edit_task()
+        self._set_new_task(response)
+
+    PREFIX = "The overall user's task is: "
+    SUFFIX = "The step by step plan is: "
+
+    def _set_new_task(self, generated_plan: str) -> None:
+        """
+        Build the final task string:
+            "The overall plan is: <original task>\n\n<generated plan>"
+        and update every MessageManager in one go.
+        """
+        if generated_plan.startswith(self.PREFIX):
+            final_task = generated_plan
+        else:
+            final_task = f"{self.PREFIX}{self.original_task}\n{self.SUFFIX}\n{generated_plan}"
+        self.task = final_task
+        self.initiate_messages()
 
     def _too_many_failures(self) -> bool:
         if self.consecutive_failures >= self.max_failures:
