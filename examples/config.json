@@ -15,6 +15,13 @@
     "base_url": "https://llm.turixapi.io/v1" 
   },
 
+  "planner_llm": {
+    "provider": "turix",
+    "model_name": "turix-model",
+    "api_key": "your_api_key_here",
+    "base_url": "https://llm.turixapi.io/v1" 
+  },
+
   "agent": {
     "task": "open Chrome, go to github, and search for turix-cua in the github webpage. Enter the TuriX-CUA repository, and star it.",
     "short_memory_len": 5,

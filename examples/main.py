@@ -114,6 +114,7 @@ def main(config_path: str = "config.json"):
     # --- Build LLM & Agent --------------------------------------------------
     brain_llm = build_llm(cfg["brain_llm"])
     actor_llm = build_llm(cfg["actor_llm"])
+    planner_llm = build_llm(cfg["planner_llm"])
     agent_cfg = cfg["agent"]
     controller = Controller()
 
@@ -121,6 +122,7 @@ def main(config_path: str = "config.json"):
         task                    = agent_cfg["task"],
         brain_llm               = brain_llm,
         actor_llm               = actor_llm,
+        planner_llm             = planner_llm,
         short_memory_len        = agent_cfg.get("short_memory_len", 5),
         controller              = controller,
         use_ui                  = agent_cfg.get("use_ui", False),
