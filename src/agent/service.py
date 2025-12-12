@@ -10,6 +10,7 @@ from pathlib import Path
 import Quartz
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 import re
+from datetime import datetime
 from dotenv import load_dotenv
 from langchain_core.language_models.chat_models import BaseChatModel
 from typing import Type
@@ -122,7 +123,10 @@ class Agent:
         agent_id: Optional[str] = None,
     ):
         self.wait_this_step = False
-        self.agent_id = agent_id or str(uuid.uuid4())
+        if agent_id:
+            self.agent_id = agent_id
+        else:
+            self.agent_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.task = task
         self.original_task = task
         self.resume = resume
@@ -151,7 +155,7 @@ class Agent:
         self.goal_action_memory = OrderedDict()
 
         self.last_goal = None
-        self.state_memory = OrderedDict()
+        self.brain_history_memory = OrderedDict()
         self.status = "success"
         # Setup dynamic Action Model
         self._setup_action_models()
@@ -220,7 +224,66 @@ class Agent:
                 if r.current_app_pid:
                     latest_pid = r.current_app_pid
         return latest_pid
+    
 
+
+
+    def _update_short_memory(self) -> None:
+        """
+        更新记忆内容，对中期记忆内容进行删减。
+        """
+
+
+        memory_content = []
+        sorted_steps = sorted(self.brain_history_memory.keys(), reverse=True)
+        
+        # 1. 清理：只保留最近15步
+        steps_to_keep = sorted_steps[:15]
+        for step in sorted_steps:
+            if step not in steps_to_keep:
+                del self.brain_history_memory[step]
+
+  
+        for index, step in enumerate(sorted_steps):
+            if step not in steps_to_keep:
+                continue
+
+            data = self.brain_history_memory[step]
+            is_latest_step = (index == 0)
+            
+            if not is_latest_step:
+                if 'current_state' in data and isinstance(data['current_state'], dict):
+                    if 'task_progress' in data['current_state']:
+                        del data['current_state']['task_progress']
+                if 'task_progress' in data:
+                    del data['task_progress']
+     
+            # --- 压缩 analysis ---
+            distance = self.n_steps - step
+            if distance >= 5:
+                if 'current_state' in data and 'analysis' in data:
+                    summary = data['current_state']
+                    self.brain_history_memory[step] = summary
+                    data = summary 
+
+        # 3. 生成字符串
+        steps_to_render = sorted(steps_to_keep)
+        for step in steps_to_render:
+            data = self.brain_history_memory[step]
+            distance = self.n_steps - step
+            
+            entry_str = ""
+            if distance < 5:
+                # 短期记忆：完整 JSON
+                entry_str = f"Step {step} Brain Thought: {json.dumps(data, ensure_ascii=False)}"
+            else:
+                # 中期记忆：摘要 JSON
+                entry_str = f"Step {step} Brain Summary: {json.dumps(data, ensure_ascii=False)}"
+            
+            memory_content.append(entry_str)
+
+        self.short_memory = "\n".join(memory_content)
+        
     def save_memory(self) -> None:
         """
         Save the current memory to a file.
@@ -232,9 +295,10 @@ class Agent:
             "task": self.task,
             "next_goal": self.next_goal,
             "last_step_action": self.last_step_action,
-            "short_memory": self.short_memory,
             "infor_memory": self.infor_memory,
-            "state_memory": self.state_memory,
+            # "brain_history_memory": self.brain_history_memory, # 替换 state_memory
+            'brain_history_memory': self.brain_history_memory,
+
             "step": self.n_steps
         }
         file_name = os.path.join(self.save_temp_file_path, f"memory.jsonl")
@@ -258,9 +322,12 @@ class Agent:
                 data = json.loads(lines[-1])
                 self.task = data.get("task", "")
                 self.last_pid = data.get("pid", None)
-                self.short_memory = data.get("short_memory", [])
                 self.infor_memory = data.get("infor_memory", [])
-                self.state_memory = data.get("state_memory", None)
+                # self.state_memory = data.get("state_memory", None)
+                self.brain_history_memory = data.get("brain_history_memory", OrderedDict())
+                if self.brain_history_memory:
+                    self.brain_history_memory = OrderedDict({int(k): v for k, v in self.brain_history_memory.items()})
+                self._update_short_memory()
                 self.last_step_action = data.get("last_step_action", None)
                 self.next_goal = data.get("next_goal", "")
                 self.n_steps = data.get("step", 1)
@@ -331,8 +398,8 @@ class Agent:
             cleaned_brain_response = re.sub(r"```$", "", cleaned_brain_response).strip()
             logger.debug(f"[Brain] Raw text: {cleaned_brain_response}")
             parsed = json.loads(cleaned_brain_response)
-
             self._save_brain_conversation(brain_messages, parsed, step=self.n_steps)
+            self.brain_history_memory[self.n_steps] = parsed
             self.next_goal = parsed['current_state']['next_goal']
             self.current_state = parsed['current_state']
 
@@ -435,15 +502,13 @@ class Agent:
             else:
                 self.wait_this_step = False
             if self.last_step_action and not self.wait_this_step:
-                self.state_memory[f'Step {self.n_steps}'] = f'Goal: {self.last_goal}'
-                self.state_memory[f'Step {self.n_steps} is'] = '(success)'
-                self.goal_action_memory[f'Step {self.n_steps}'] = f'Goal: {self.last_goal}, Actions: {self.last_step_action}'
-                self.goal_action_memory[f'Step {self.n_steps} is'] = f'(success)'
 
-                if len(self.goal_action_memory) > self.short_memory_len:
-                    first_key = next(iter(self.goal_action_memory))
-                    del self.goal_action_memory[first_key]
-                self.short_memory = f'The important memory: {self.state_memory}. {self.goal_action_memory}'
+                
+                # --- 更新记忆 --- 
+                self._update_short_memory()
+                self.save_memory
+            
+
         except Exception as e:
             result = await self._handle_step_error(e)
             self._last_result = result
@@ -524,7 +589,7 @@ class Agent:
         else:
             emoji = '🤷'
         logger.info(f'{emoji} Eval: {self.current_state["step_evaluate"]}')
-        logger.info(f'🧠 Memory: {self.state_memory}')
+        logger.info(f'🧠 Memory: {self.brain_history_memory}')
         logger.info(f'🎯 Goal to achieve this step: {self.next_goal}')
         for i, action in enumerate(response.action):
             logger.info(f'🛠️  Action {i + 1}/{len(response.action)}: {action.model_dump_json(exclude_unset=True)}')

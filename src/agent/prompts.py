@@ -157,6 +157,7 @@ It must be valid JSON, so be careful with quotes and commas.
     "step_evaluate": "Success/Failed (based on step completion and your analysis)",
     "ask_human": "Describe what you want user to do or No (No if nothing to ask for confirmation. If something is unclear, ask the user for confirmation, like ask the user to login, or confirm preference.)",
     "next_goal": "Goal of this step to achieve the task, ONLY DESCRIBE THE EXPECTED RESULT OF THIS STEP",
+    "task_progress": "A maintained list of the global task progress. Format: - [Completed] Task A\n - [In Progress] Task B\n - [Pending] Task C (brief summary of remaining). Update this list every step to prevent forgetting long-term goals."
 }},
 }}
 === ROLE-SPECIFIC DIRECTIVES ===

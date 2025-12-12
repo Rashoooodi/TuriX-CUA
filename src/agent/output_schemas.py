@@ -154,12 +154,15 @@ class OutputSchemas:
                 "properties": {
                     "step_evaluate": {"type": "string"},
                     "ask_human": {"type": "string"},
-                    "next_goal": {"type": "string"}
+                    "next_goal": {"type": "string"},
+                    # 用于记录全局任务进度
+                    "task_progress": {"type": "string"}
                 },
                 "required": [
                     "step_evaluate",
                     "ask_human",
                     "next_goal",
+                    "task_progress"
                 ]
             },
         },
