@@ -26,6 +26,7 @@
     "task": "open Chrome, go to github, and search for turix-cua in the github webpage. Enter the TuriX-CUA repository, and star it.",
     "short_memory_len": 5,
     "use_ui": false,
+    "use_plan": false,
     "max_actions_per_step": 5,
     "max_steps": 100,
     "use_turix": true,
