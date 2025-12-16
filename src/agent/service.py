@@ -102,6 +102,7 @@ class Agent:
         save_actor_conversation_path: Optional[str] = None,
         save_actor_conversation_path_encoding: Optional[str] = 'utf-8',
         max_failures: int = 5,
+        memory_budget: int = 500,
         retry_delay: int = 10,
         max_input_tokens: int = 32000,
         resume = False,
@@ -131,7 +132,7 @@ class Agent:
         else:
             self.agent_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.task = task
-        self.memory_budget = 50  # Max number of previous actions to keep in memory
+        self.memory_budget = memory_budget  # Max number of previous actions to keep in memory
         self.original_task = task
         self.resume = resume
         self.memory_llm = to_structured(memory_llm, OutputSchemas.MEMORY_RESPONSE_FORMAT, MemoryOutput)

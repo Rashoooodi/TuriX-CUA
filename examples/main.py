@@ -129,6 +129,7 @@ def main(config_path: str = "config.json"):
         actor_llm               = actor_llm,
         planner_llm             = planner_llm,
         memory_llm              = memory_llm,
+        memory_budget           = agent_cfg.get("memory_budget", 500),
         short_memory_len        = agent_cfg.get("short_memory_len", 5),
         controller              = controller,
         use_ui                  = agent_cfg.get("use_ui", False),
