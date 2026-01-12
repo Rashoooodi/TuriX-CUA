@@ -602,7 +602,7 @@ class Agent:
         else:
             emoji = '🤷'
         logger.info(f'{emoji} Eval: {self.current_state["step_evaluate"]}')
-        logger.info(f'🧠 Memory: {self.brain_context}')
+        logger.info(f'🧠 Memory: {self.brain_memory}')
         logger.info(f'🎯 Goal to achieve this step: {self.next_goal}')
         for i, action in enumerate(response.action):
             logger.info(f'🛠️  Action {i + 1}/{len(response.action)}: {action.model_dump_json(exclude_unset=True)}')
