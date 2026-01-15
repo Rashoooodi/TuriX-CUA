@@ -306,12 +306,11 @@ class Agent:
 
         memory_content = []
         sorted_steps = sorted(self.brain_context.keys(), reverse=True)
-        logger.debug(f"all memory: {self.brain_context}")
         analysis = self.brain_context[sorted_steps[0]]['analysis'] if sorted_steps else None
         current_state = self.brain_context[sorted_steps[0]]['current_state'] if sorted_steps else None
-        logger.debug(f"current_state: {current_state}")
+        # logger.debug(f"current_state: {current_state}")
         step_goal = current_state['next_goal'] if current_state else None
-        logger.debug(f"step_goal: {step_goal}")
+        # logger.debug(f"step_goal: {step_goal}")
         evaluation = current_state['step_evaluate'] if current_state else None
         ask_human = current_state['ask_human'] if current_state else None
 
