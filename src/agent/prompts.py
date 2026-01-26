@@ -93,7 +93,8 @@ OR (for read files only):
   Necessary information remembered CONTAINS THAT MESSAGE OR INFO.
   10. You should do the analyzation (including the user analyzation in the screenshot) in the analysis field.
   11. When you ask the actor to scroll down and you want to store the information in the screenshot, you need to write down in the next goal that you want the actor to record_info (with a short `file_name`), then scroll down.
-  12. If you find the information in the screenshot will help the later execution of the task, you need to write down in the next goal that you want the actor to record_info (with a short `file_name`), and what info to record.
+  12. When you want to scroll for a whole page or half page, you need to specify it in the next goal.
+  13. If you find the information in the screenshot will help the later execution of the task, you need to write down in the next goal that you want the actor to record_info (with a short `file_name`), and what info to record.
 === ACTION-SPECIFIC REMINDERS ===
 - **Text Input:** Verify the insertion point is correct.
 - **Scrolling:** Confirm that scrolling completed.

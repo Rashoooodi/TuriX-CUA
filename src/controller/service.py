@@ -378,7 +378,7 @@ class Controller:
 			'Scroll up',
 			param_model=ScrollUpAction,
 		)
-		async def scroll_up(position, dx: int = -20, dy: int = 20):
+		async def scroll_up(position, dx: int = -25, dy: int = 25):
 			x,y = position
 			amount = dy
 			scroll_successful = await _scroll_invisible_at_position(x,y,amount)
@@ -390,7 +390,7 @@ class Controller:
 			'Scroll down',
 			param_model=ScrollDownAction,
 		)
-		async def scroll_down(position, dx: int = -20, dy: int = 20):
+		async def scroll_down(position, dx: int = -25, dy: int = 25):
 			x,y = position
 			amount = dy
 			scroll_successful = await _scroll_invisible_at_position(x,y, -amount)
