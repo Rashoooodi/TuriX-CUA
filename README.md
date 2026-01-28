@@ -120,7 +120,7 @@ For more details, check our [report](https://turix.ai/technical-report/).
 > git checkout multi-agent-windows
 > ```
 >
-> **0. Windows Legacy Users**: For the previous Windows setup, switch to the `windows-legacy` branch.
+> **0. Windows Legacy Users**: For the previous Windows setup, switch to the `windows_legacy` branch.
 >
 > **0. macOS Legacy Users**: For the previous single-model macOS setup, switch to the `mac_legacy` branch.
 

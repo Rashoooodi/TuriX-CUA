@@ -124,7 +124,7 @@ TuriX 让你的强大 AI 模型能在桌面上真正动手操作。
 > git checkout multi-agent-windows
 > ```
 >
-> **0. Windows 旧版用户**：如需此前的 Windows 版本，请切换到 `windows-legacy` 分支。
+> **0. Windows 旧版用户**：如需此前的 Windows 版本，请切换到 `windows_legacy` 分支。
 >
 > **0. macOS 旧版用户**：如需此前的单模型 macOS 版本，请切换到 `mac_legacy` 分支。
 
