@@ -2,6 +2,14 @@
 
 A native macOS application built with SwiftUI that provides a chat-centric interface for the TuriX Computer-Use-Agent with comprehensive first-run setup, LLM configuration, and settings management.
 
+## 📚 Quick Links
+
+- 👤 **End Users**: Start with [END_USER_README.md](END_USER_README.md)
+- 👨‍💻 **Developers**: Start with [DEVELOPER_README.md](DEVELOPER_README.md)
+- 📖 **All Documentation**: See [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
+
+---
+
 ## Features
 
 ### 🎯 First-Run Setup Flow
