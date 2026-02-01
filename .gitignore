@@ -1,1 +1,15 @@
 .turix_tmp/
+
+# Xcode
+TuriXMacApp/build/
+TuriXMacApp/DerivedData/
+TuriXMacApp/*.xcodeproj/xcuserdata/
+TuriXMacApp/*.xcodeproj/project.xcworkspace/xcuserdata/
+TuriXMacApp/*.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+TuriXMacApp/.swiftpm/
+TuriXMacApp/.build/
+
+# macOS
+.DS_Store
