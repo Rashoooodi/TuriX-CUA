@@ -129,7 +129,7 @@ enum LLMSetupChoice: String, CaseIterable {
     }
 }
 
-enum ModelRole: String, CaseIterable {
+enum ModelRole: String, CaseIterable, Hashable {
     case brain = "brain"
     case actor = "actor"
     case planner = "planner"
