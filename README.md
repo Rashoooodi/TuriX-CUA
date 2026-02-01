@@ -70,6 +70,8 @@ Copy it into your ClawDBot local skills folder (for example: `clawd/skills/local
 
 ## 📰 Latest News
 
+**February 1, 2026** - 🎨 We released a **Native macOS GUI Application** built with SwiftUI! Features include a complete 7-step setup wizard, chat interface, settings management, and comprehensive documentation (60,000+ words). Perfect for users who want a graphical interface for TuriX. [Check it out →](TuriXMacApp/README.md)
+
 **January 30, 2026** - 🧩 We published the **TuriX ClawDBot Skill** on ClawHub. You can now use ClawDBot to call TuriX and automate desktop tasks.
 
 **January 27, 2026 — v0.3** - 🎉 TuriX v0.3 is now live on the main branch! This release brings DuckDuckGo search, Ollama support, advanced recoverable memory compression, and Skills—unlocking smarter planning, more resilient memory, and reusable workflows for desktop automation. We’re excited to see more users try it out and share feedback as we keep pushing the platform forward.
