@@ -23,6 +23,7 @@
 		A1000000000000000000000E /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* SummaryView.swift */; };
 		A1000000000000000000000F /* MainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* MainChatView.swift */; };
 		A10000000000000000000010 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* SettingsView.swift */; };
+		A10000000000000000000011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		A20000000000000000000010 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A20000000000000000000011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000000000000000000012 /* TuriXMacApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TuriXMacApp.entitlements; sourceTree = "<group>"; };
+		A20000000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				A50000000000000000000004 /* Models */,
 				A50000000000000000000005 /* Setup */,
 				A50000000000000000000006 /* Views */,
+				A20000000000000000000013 /* Assets.xcassets */,
 				A20000000000000000000011 /* Info.plist */,
 				A20000000000000000000012 /* TuriXMacApp.entitlements */,
 			);
@@ -181,6 +184,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000011 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
