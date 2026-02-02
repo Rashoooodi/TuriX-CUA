@@ -14,26 +14,58 @@ struct MainChatView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header
-            HStack {
-                Image(systemName: "brain.head.profile")
-                    .font(.title)
-                    .foregroundColor(.blue)
+            // Header with gradient
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.blue.opacity(0.1),
+                        Color(NSColor.controlBackgroundColor)
+                    ]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
                 
-                Text("TuriX")
-                    .font(.title)
-                    .bold()
-                
-                Spacer()
-                
-                Button(action: {}) {
-                    Image(systemName: "gearshape")
+                HStack(spacing: 12) {
+                    // Logo with glow
+                    ZStack {
+                        Circle()
+                            .fill(Color.blue.opacity(0.2))
+                            .frame(width: 44, height: 44)
+                        
+                        Image(systemName: "brain.head.profile")
+                            .font(.title2)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.blue, .purple]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("TuriX")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Text(isProcessing ? "Working..." : "Ready")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {}) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.borderless)
+                    .help("Settings")
                 }
-                .buttonStyle(.borderless)
-                .help("Settings")
+                .padding()
             }
-            .padding()
-            .background(Color(NSColor.controlBackgroundColor))
+            .frame(height: 70)
             
             Divider()
             
@@ -41,29 +73,56 @@ struct MainChatView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 15) {
                     if messages.isEmpty {
-                        VStack(spacing: 20) {
+                        VStack(spacing: 25) {
                             Spacer()
                             
-                            Image(systemName: "bubble.left.and.bubble.right")
-                                .font(.system(size: 60))
-                                .foregroundColor(.secondary)
+                            // Welcome icon with gradient
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        RadialGradient(
+                                            gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.clear]),
+                                            center: .center,
+                                            startRadius: 0,
+                                            endRadius: 60
+                                        )
+                                    )
+                                    .frame(width: 120, height: 120)
+                                
+                                Image(systemName: "bubble.left.and.bubble.right.fill")
+                                    .font(.system(size: 60))
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [.blue, .purple]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                            }
                             
                             Text("Welcome to TuriX")
-                                .font(.title2)
-                                .bold()
+                                .font(.title)
+                                .fontWeight(.bold)
                             
                             Text("Ask me to perform tasks on your desktop")
                                 .foregroundColor(.secondary)
+                                .font(.body)
                             
-                            VStack(alignment: .leading, spacing: 10) {
+                            VStack(alignment: .leading, spacing: 12) {
                                 Text("Example tasks:")
-                                    .font(.caption)
+                                    .font(.callout)
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.secondary)
                                 
                                 ExampleTask(text: "Open Chrome and search for news")
                                 ExampleTask(text: "Create a new document and write a summary")
                                 ExampleTask(text: "Check my email and reply to the latest message")
                             }
+                            .padding(20)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(NSColor.controlBackgroundColor).opacity(0.5))
+                            )
                             
                             Spacer()
                         }
@@ -80,28 +139,55 @@ struct MainChatView: View {
             
             Divider()
             
-            // Input area
-            HStack(alignment: .bottom, spacing: 10) {
-                TextEditor(text: $messageText)
-                    .frame(minHeight: 40, maxHeight: 100)
-                    .padding(8)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                    )
-                    .disabled(isProcessing)
+            // Input area with better styling
+            HStack(alignment: .bottom, spacing: 12) {
+                ZStack(alignment: .topLeading) {
+                    // Placeholder
+                    if messageText.isEmpty {
+                        Text("Type your message...")
+                            .foregroundColor(.secondary)
+                            .padding(.top, 8)
+                            .padding(.leading, 12)
+                    }
+                    
+                    TextEditor(text: $messageText)
+                        .frame(minHeight: 44, maxHeight: 100)
+                        .padding(8)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.blue.opacity(messageText.isEmpty ? 0.2 : 0.5), lineWidth: 1.5)
+                        )
+                        .disabled(isProcessing)
+                        .scrollContentBackground(.hidden)
+                }
                 
                 Button(action: sendMessage) {
-                    Image(systemName: isProcessing ? "hourglass" : "arrow.up.circle.fill")
-                        .font(.title)
-                        .foregroundColor(messageText.isEmpty || isProcessing ? .secondary : .blue)
+                    ZStack {
+                        Circle()
+                            .fill(
+                                messageText.isEmpty || isProcessing
+                                ? Color.secondary.opacity(0.2)
+                                : LinearGradient(
+                                    gradient: Gradient(colors: [.blue, .purple]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 44, height: 44)
+                        
+                        Image(systemName: isProcessing ? "hourglass" : "arrow.up")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                    }
                 }
                 .buttonStyle(.borderless)
                 .disabled(messageText.isEmpty || isProcessing)
             }
-            .padding()
+            .padding(16)
+            .background(Color(NSColor.windowBackgroundColor))
         }
     }
     
@@ -136,17 +222,44 @@ struct ChatBubble: View {
     let message: ChatMessage
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 12) {
             if message.isUser {
                 Spacer()
+            } else {
+                // AI Avatar
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [.blue.opacity(0.8), .purple.opacity(0.8)]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Image(systemName: "brain.head.profile")
+                            .font(.system(size: 14))
+                            .foregroundColor(.white)
+                    )
             }
             
-            VStack(alignment: message.isUser ? .trailing : .leading, spacing: 5) {
+            VStack(alignment: message.isUser ? .trailing : .leading, spacing: 6) {
                 Text(message.content)
-                    .padding(12)
-                    .background(message.isUser ? Color.blue : Color(NSColor.controlBackgroundColor))
+                    .padding(14)
+                    .background(
+                        message.isUser
+                        ? AnyView(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        : AnyView(Color(NSColor.controlBackgroundColor))
+                    )
                     .foregroundColor(message.isUser ? .white : .primary)
-                    .cornerRadius(12)
+                    .cornerRadius(16)
+                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
                 
                 Text(formatTime(message.timestamp))
                     .font(.caption2)
@@ -154,7 +267,17 @@ struct ChatBubble: View {
             }
             .frame(maxWidth: 500, alignment: message.isUser ? .trailing : .leading)
             
-            if !message.isUser {
+            if message.isUser {
+                // User Avatar
+                Circle()
+                    .fill(Color.secondary.opacity(0.3))
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    )
+            } else {
                 Spacer()
             }
         }
@@ -171,14 +294,15 @@ struct ExampleTask: View {
     let text: String
     
     var body: some View {
-        HStack {
-            Image(systemName: "lightbulb")
+        HStack(spacing: 10) {
+            Image(systemName: "lightbulb.fill")
                 .foregroundColor(.orange)
-                .font(.caption)
+                .font(.body)
             
             Text(text)
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .font(.body)
+                .foregroundColor(.primary)
         }
+        .padding(.vertical, 4)
     }
 }

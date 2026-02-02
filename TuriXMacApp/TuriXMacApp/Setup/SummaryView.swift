@@ -12,20 +12,35 @@ struct SummaryView: View {
     @Binding var navigationPath: NavigationPath
     @ObservedObject var appState: AppState
     @State private var isCompleted = false
+    @State private var checkmarkScale: CGFloat = 0
+    @State private var successOpacity: Double = 0
     
     var body: some View {
         VStack(spacing: 30) {
             if !isCompleted {
-                Text("Configuration Summary")
-                    .font(.largeTitle)
-                    .bold()
-                
-                Text("Review your configuration before finishing")
-                    .foregroundColor(.secondary)
+                // Header
+                VStack(spacing: 16) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.blue, .purple]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    
+                    Text("Configuration Summary")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Text("Review your configuration before finishing")
+                        .foregroundColor(.secondary)
+                }
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        SummarySection(title: "LLM Configuration") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        SummarySection(title: "LLM Configuration", icon: "cpu") {
                             SummaryRow(label: "Setup Type", value: setupState.llmChoice.displayName)
                             
                             if !setupState.ollamaModels.isEmpty {
@@ -37,7 +52,7 @@ struct SummaryView: View {
                             }
                         }
                         
-                        SummarySection(title: "Model Assignments") {
+                        SummarySection(title: "Model Assignments", icon: "brain") {
                             ForEach(ModelRole.allCases, id: \.self) { role in
                                 if let assignment = setupState.modelAssignments[role] {
                                     SummaryRow(
@@ -48,12 +63,12 @@ struct SummaryView: View {
                             }
                         }
                         
-                        SummarySection(title: "Resource Estimates") {
-                            SummaryRow(label: "RAM Usage", value: estimatedRAM)
-                            SummaryRow(label: "Cost per Task", value: estimatedCost)
+                        SummarySection(title: "Resource Estimates", icon: "gauge") {
+                            SummaryRow(label: "RAM Usage", value: estimatedRAM, icon: "memorychip")
+                            SummaryRow(label: "Cost per Task", value: estimatedCost, icon: "dollarsign.circle")
                         }
                         
-                        SummarySection(title: "Optional Features") {
+                        SummarySection(title: "Optional Features", icon: "star") {
                             SummaryRow(label: "Discord Integration", value: setupState.enableDiscord ? "Enabled" : "Disabled")
                             SummaryRow(label: "Notifications", value: setupState.enableNotifications ? "Enabled" : "Disabled")
                             SummaryRow(label: "Start Minimized", value: setupState.startMinimized ? "Yes" : "No")
@@ -69,40 +84,94 @@ struct SummaryView: View {
                         navigationPath.removeLast()
                     }
                     .buttonStyle(.bordered)
+                    .controlSize(.large)
                     
                     Spacer()
                     
-                    Button("Finish Setup") {
+                    Button {
                         finishSetup()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Text("Finish Setup")
+                            Image(systemName: "checkmark.circle.fill")
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                 }
                 .padding(.horizontal)
             } else {
-                // Success state
+                // Success state with animation
                 VStack(spacing: 30) {
                     Spacer()
                     
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 80))
-                        .foregroundColor(.green)
+                    ZStack {
+                        // Glow effect
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    gradient: Gradient(colors: [Color.green.opacity(0.3), Color.clear]),
+                                    center: .center,
+                                    startRadius: 0,
+                                    endRadius: 100
+                                )
+                            )
+                            .frame(width: 200, height: 200)
+                            .opacity(successOpacity)
+                        
+                        // Checkmark
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 100))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.green, .green.opacity(0.7)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .scaleEffect(checkmarkScale)
+                            .shadow(color: .green.opacity(0.3), radius: 20, x: 0, y: 10)
+                    }
                     
-                    Text("Setup Complete! 🎉")
-                        .font(.largeTitle)
-                        .bold()
-                    
-                    Text("TuriX is now ready to use")
-                        .foregroundColor(.secondary)
+                    VStack(spacing: 12) {
+                        Text("Setup Complete! 🎉")
+                            .font(.system(size: 42, weight: .bold))
+                            .opacity(successOpacity)
+                        
+                        Text("TuriX is now ready to use")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                            .opacity(successOpacity)
+                    }
                     
                     Spacer()
                     
-                    Button("Open Chat") {
-                        // This will trigger the main view
+                    Button {
                         appState.markSetupCompleted()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Text("Open Chat")
+                            Image(systemName: "arrow.right.circle.fill")
+                        }
+                        .font(.title3)
+                        .fontWeight(.semibold)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
+                    .tint(.green)
+                    .padding(.bottom, 40)
+                    .opacity(successOpacity)
+                }
+                .onAppear {
+                    // Animate checkmark
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.6).delay(0.1)) {
+                        checkmarkScale = 1.0
+                    }
+                    
+                    // Fade in content
+                    withAnimation(.easeIn(duration: 0.5).delay(0.3)) {
+                        successOpacity = 1.0
+                    }
                 }
             }
         }
@@ -125,7 +194,7 @@ struct SummaryView: View {
         let configuration = setupState.buildConfiguration()
         appState.saveConfiguration(configuration)
         
-        withAnimation {
+        withAnimation(.spring(response: 0.5)) {
             isCompleted = true
         }
     }
@@ -133,19 +202,31 @@ struct SummaryView: View {
 
 struct SummarySection<Content: View>: View {
     let title: String
+    var icon: String = "info.circle"
     @ViewBuilder let content: Content
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: icon + ".fill")
+                    .foregroundColor(.blue)
+                Text(title)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+            }
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 content
             }
-            .padding()
-            .background(Color(NSColor.textBackgroundColor))
-            .cornerRadius(8)
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(NSColor.controlBackgroundColor).opacity(0.5))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.blue.opacity(0.1), lineWidth: 1)
+            )
         }
     }
 }
@@ -153,15 +234,21 @@ struct SummarySection<Content: View>: View {
 struct SummaryRow: View {
     let label: String
     let value: String
+    var icon: String? = nil
     
     var body: some View {
         HStack {
+            if let icon = icon {
+                Image(systemName: icon)
+                    .foregroundColor(.secondary)
+                    .frame(width: 16)
+            }
             Text(label)
                 .foregroundColor(.secondary)
             Spacer()
             Text(value)
-                .bold()
+                .fontWeight(.medium)
         }
-        .font(.caption)
+        .font(.subheadline)
     }
 }

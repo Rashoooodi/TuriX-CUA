@@ -15,14 +15,41 @@ struct PermissionsCheckView: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            Text("System Permissions")
-                .font(.largeTitle)
-                .bold()
+            // Icon and title
+            VStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.clear]),
+                                center: .center,
+                                startRadius: 0,
+                                endRadius: 50
+                            )
+                        )
+                        .frame(width: 100, height: 100)
+                    
+                    Image(systemName: "lock.shield.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.blue, .purple]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+                
+                Text("System Permissions")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                
+                Text("TuriX requires certain macOS permissions to function properly")
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
             
-            Text("TuriX requires certain macOS permissions to function properly")
-                .foregroundColor(.secondary)
-            
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 PermissionRow(
                     title: "Screen Recording",
                     description: "Required for AI to see your screen",
@@ -47,9 +74,28 @@ struct PermissionsCheckView: View {
                     action: openNotificationSettings
                 )
             }
-            .padding()
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(10)
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(NSColor.controlBackgroundColor).opacity(0.5))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+            )
+            
+            if !canContinue {
+                HStack(spacing: 8) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.orange)
+                    Text("Grant required permissions to continue")
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                }
+                .padding(12)
+                .background(Color.orange.opacity(0.1))
+                .cornerRadius(8)
+            }
             
             Spacer()
             
@@ -58,18 +104,26 @@ struct PermissionsCheckView: View {
                     navigationPath.removeLast()
                 }
                 .buttonStyle(.bordered)
+                .controlSize(.large)
                 
                 Spacer()
                 
-                Button("Refresh Status") {
+                Button {
                     checkPermissions()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "arrow.clockwise")
+                        Text("Refresh Status")
+                    }
                 }
                 .buttonStyle(.bordered)
+                .controlSize(.large)
                 
                 Button("Continue") {
                     navigationPath.append(SetupStep.llmChoice)
                 }
                 .buttonStyle(.borderedProminent)
+                .controlSize(.large)
                 .disabled(!canContinue)
             }
             .padding(.horizontal)
@@ -131,39 +185,62 @@ struct PermissionRow: View {
     let action: () -> Void
     
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack {
+        HStack(spacing: 16) {
+            // Status icon with animation
+            ZStack {
+                Circle()
+                    .fill(status ? Color.green.opacity(0.2) : (isRequired ? Color.red.opacity(0.2) : Color.orange.opacity(0.2)))
+                    .frame(width: 44, height: 44)
+                
+                Image(systemName: status ? "checkmark.circle.fill" : (isRequired ? "xmark.circle.fill" : "exclamationmark.triangle.fill"))
+                    .font(.title2)
+                    .foregroundColor(status ? .green : (isRequired ? .red : .orange))
+            }
+            
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 8) {
                     Text(title)
                         .font(.headline)
+                        .fontWeight(.semibold)
+                    
                     if isRequired {
                         Text("Required")
-                            .font(.caption)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.red.opacity(0.2))
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color.red.opacity(0.15))
                             .foregroundColor(.red)
-                            .cornerRadius(4)
+                            .cornerRadius(6)
                     }
                 }
+                
                 Text(description)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             
             Spacer()
             
-            Text(status ? "✅" : (isRequired ? "❌" : "⚠️"))
-                .font(.title2)
-            
-            Button("Open Settings") {
-                action()
+            if !status {
+                Button {
+                    action()
+                } label: {
+                    HStack(spacing: 6) {
+                        Text("Grant")
+                        Image(systemName: "arrow.up.forward.square")
+                    }
+                    .font(.callout)
+                    .fontWeight(.medium)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+                .tint(.blue)
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
         }
-        .padding()
+        .padding(16)
         .background(Color(NSColor.textBackgroundColor))
-        .cornerRadius(8)
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
 }
