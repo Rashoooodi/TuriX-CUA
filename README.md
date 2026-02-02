@@ -23,8 +23,22 @@ It ships with a **state‑of‑the‑art computer‑use agent** (passes > 68 % o
 
 Prefer your own model? **Change in `config.json` and go.**
 
+## 🖥️ Native macOS GUI Application
+
+**NEW!** TuriX now comes with a native macOS GUI application built with SwiftUI! 
+
+Features include:
+- 🎯 **First-run setup wizard** - Easy guided configuration
+- 💬 **Chat interface** - Natural conversation with your AI agent
+- ⚙️ **LLM configuration** - Support for Ollama (local) and Google AI (cloud)
+- 🔒 **Permission management** - Automated macOS permission setup
+- 📊 **Model assignment** - Flexible model configuration for different roles
+
+[➡️ See the macOS GUI documentation](TuriXMacApp/README.md)
+
 ## Table of Contents
 - [📞 Contact & Community](#-contact--community)
+- [🖥️ Native macOS GUI Application](#️-native-macos-gui-application)
 - [🤖 ClawDBot Skill](#-clawdbot-skill)
 - [📰 Latest News](#-latest-news)
 - [🖼️ Demos](#️-demos)
@@ -55,6 +69,8 @@ Copy it into your ClawDBot local skills folder (for example: `clawd/skills/local
 ---
 
 ## 📰 Latest News
+
+**February 1, 2026** - 🎨 We released a **Native macOS GUI Application** built with SwiftUI! Features include a complete 7-step setup wizard, chat interface, settings management, and comprehensive documentation (60,000+ words). Perfect for users who want a graphical interface for TuriX. [Check it out →](TuriXMacApp/README.md)
 
 **January 30, 2026** - 🧩 We published the **TuriX ClawDBot Skill** on ClawHub. You can now use ClawDBot to call TuriX and automate desktop tasks.
 
