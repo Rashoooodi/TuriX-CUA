@@ -6,6 +6,7 @@ A native macOS application built with SwiftUI that provides a chat-centric inter
 
 - 👤 **End Users**: Start with [END_USER_README.md](END_USER_README.md)
 - 👨‍💻 **Developers**: Start with [DEVELOPER_README.md](DEVELOPER_README.md)
+- 🔨 **Building the App**: See [BUILD.md](BUILD.md) for detailed Xcode build instructions
 - 📖 **All Documentation**: See [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
 
 ---
@@ -45,24 +46,20 @@ A native macOS application built with SwiftUI that provides a chat-centric inter
 
 ## Building the Application
 
-### 1. Open in Xcode
+📖 **For detailed step-by-step instructions, see [BUILD.md](BUILD.md)**
+
+### Quick Start
 
 ```bash
 cd TuriXMacApp
 open TuriXMacApp.xcodeproj
 ```
 
-### 2. Configure Signing
+In Xcode:
+1. Select your development team in Signing & Capabilities
+2. Press `Cmd + R` to build and run
 
-1. Select the project in Xcode's navigator
-2. Select the "TuriXMacApp" target
-3. Go to "Signing & Capabilities"
-4. Select your development team or create a personal team
-
-### 3. Build and Run
-
-- Press `Cmd + R` to build and run
-- Or select `Product > Run` from the menu
+For troubleshooting and detailed instructions, refer to the [complete build guide](BUILD.md).
 
 ## Project Structure
 

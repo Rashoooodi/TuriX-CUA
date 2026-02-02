@@ -12,8 +12,10 @@ Welcome! This page will direct you to the right documentation based on what you 
 ### 👨‍💻 For Developers
 **Want to build, modify, or contribute? Start here:**
 - **[DEVELOPER_README.md](DEVELOPER_README.md)** ⭐ **START HERE** - Complete developer guide
+- **[BUILD.md](BUILD.md)** 🔨 **BUILD GUIDE** - Step-by-step Xcode build instructions
 - [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) - Additional development tips and architecture details
 - [CODE_VERIFICATION.md](CODE_VERIFICATION.md) - Code quality and verification report
+- [DESIGN_REPORT.md](DESIGN_REPORT.md) - UI design enhancements documentation
 
 ### 🔧 For Technical Integration
 **Connecting GUI to Python backend?**
@@ -33,6 +35,9 @@ Welcome! This page will direct you to the right documentation based on what you 
 → Read [END_USER_README.md](END_USER_README.md)
 
 ### "I want to build the app from source"
+→ Read [BUILD.md](BUILD.md) - Complete Xcode build tutorial
+
+### "I want to understand the development setup"
 → Read [DEVELOPER_README.md](DEVELOPER_README.md) - Section "Building the Application"
 
 ### "I want to modify the code"
@@ -54,11 +59,11 @@ Welcome! This page will direct you to the right documentation based on what you 
 
 ## 📊 Documentation Statistics
 
-- **Total Documentation**: 10 files
-- **Total Words**: 70,000+
+- **Total Documentation**: 12 files
+- **Total Words**: 83,000+
 - **End User Guides**: 2 files
-- **Developer Guides**: 3 files
-- **Reference Docs**: 5 files
+- **Developer Guides**: 4 files
+- **Reference Docs**: 6 files
 
 ---
 
@@ -75,6 +80,7 @@ Welcome! This page will direct you to the right documentation based on what you 
 | File | Audience | Purpose | Length |
 |------|----------|---------|--------|
 | **END_USER_README.md** | 👤 End Users | Quick start guide | 4.6KB |
+| **BUILD.md** | 👨‍💻 Developers | Xcode build tutorial | 13KB |
 | **DEVELOPER_README.md** | 👨‍💻 Developers | Dev setup & workflow | 11KB |
 | USER_GUIDE.md | 👤 End Users | Detailed manual | 12KB |
 | DEVELOPER_GUIDE.md | 👨‍💻 Developers | Architecture deep dive | 9KB |
@@ -84,7 +90,8 @@ Welcome! This page will direct you to the right documentation based on what you 
 | QUICK_REFERENCE.md | All | Quick reference | 7KB |
 | PROJECT_SUMMARY.md | All | Project overview | 10KB |
 | CODE_VERIFICATION.md | 👨‍💻 Developers | Code quality report | 6KB |
+| DESIGN_REPORT.md | 👨‍💻 Developers | UI design docs | 7KB |
 
 ---
 
-**Last Updated**: February 1, 2026
+**Last Updated**: February 2, 2026
